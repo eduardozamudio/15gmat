@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2 import OperationalError
+from psycopg2.extras import DictCursor
 import dotenv
 import os
 
@@ -24,7 +25,8 @@ def get_connection():
                         user = PGUSER,
                         dbname = PGDATABASE,
                         password = PGPASSWORD,
-                        port = PGPORT)
+                        port = PGPORT,
+                        cursor_factory=DictCursor)
         
         print('Conectado!')
     except OperationalError as err:

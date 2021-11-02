@@ -1,6 +1,7 @@
 import psycopg2
 
-ESTUDIANTE_QUERY = "SELECT * FROM estudiante;"
+ESTUDIANTE_QUERY = "SELECT * FROM estudiante WHERE id_estudiante ILIKE %s OR nombre ILIKE %s OR numero_telefono ILIKE %s OR direccion ILIKE %s ESCAPE '';"
+ESTUDIANTE_QUERY_ALL = "SELECT * FROM estudiante;" 
 ESTUDIANTE_QUERY_ID = "SELECT * FROM estudiante WHERE id_estudiante = %s;"
 ESTUDIANTE_INSERT = "INSERT INTO estudiante (id_estudiante, nombre, numero_telefono, direccion) VALUES (%s, %s, %s, %s);"
 ESTUDIANTE_DELETE = "DELETE FROM estudiante WHERE id_estudiante = %s;"
@@ -40,19 +41,67 @@ def add(conn, id_estudiante, nombre, numero_telefono, direccion):
         raise e
 
 
-def get(conn):
+def get_all(conn):
     """
-    Obtiene todos las tuplas de la relación Estudiantes
-
-    :param      conn:  La conexión a la base de datos
-    :type       conn:  Instancia de pyscopg2.connection 
-
+    Obtiene todas las tuplas de la relación Estudiantes
+    
+    :param      conn:           La conexión a la base de datos
+    :type       conn:           Instancia de pyscopg2.connection
+    
     :returns:   Todas las tuplas de la relación.
-    :rtype:     list 
+    :rtype:     list
     """
     try:
         cur = conn.cursor()
-        cur.execute(ESTUDIANTE_QUERY)
+        cur.execute(ESTUDIANTE_QUERY_ALL)
+        return cur.fetchall()
+    except Exception as e:
+        raise e
+
+
+def get_by_id(conn, id_estudiante):
+    """
+    Obtiene la tupla de la relación Estudiantes con el identificador
+    
+    :param      conn:           La conexión a la base de datos
+    :type       conn:           Instancia de pyscopg2.connection
+    :param      id_estudiante:  El identificador del estudiante
+    :type       id_estudiante:  str
+    
+    :returns:   Todas las tuplas de la relación.
+    :rtype:     list
+    """
+    try:
+        cur = conn.cursor()
+        cur.execute(ESTUDIANTE_QUERY_ID, (id_estudiante,))
+        return cur.fetchone()
+    except Exception as e:
+        raise e
+
+
+def get(conn, id_estudiante, nombre, numero_telefono, direccion):
+    """
+    Obtiene todos las tuplas de la relación Estudiantes
+    
+    :param      conn:             La conexión a la base de datos
+    :type       conn:             Instancia de pyscopg2.connection
+    :param      id_estudiante:    El identificador del estudiante
+    :type       id_estudiante:    str
+    :param      nombre:           El nombre del estudiante
+    :type       nombre:           str
+    :param      numero_telefono:  El numero de telefono del estudiante
+    :type       numero_telefono:  str
+    :param      direccion:        La direccion del estudiante
+    :type       direccion:        str
+    
+    :returns:   Todas las tuplas de la relación
+    :rtype:     list
+    """
+
+    try:
+        cur = conn.cursor()
+        cur.execute(ESTUDIANTE_QUERY, (id_estudiante,
+                                       nombre, numero_telefono, direccion))
         return cur.fetchall()
     except Exception as e:
         raise e
