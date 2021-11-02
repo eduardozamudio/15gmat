@@ -3,3 +3,5 @@ notebooks/.ipynb_checkpoints/*
 .env
 __pycache__
 dist
+keys
+diagrams
