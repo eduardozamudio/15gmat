@@ -1,11 +1,9 @@
-import psycopg2
-
 ASIGNATURA_QUERY = "SELECT * FROM asignatura WHERE id_asignatura ILIKE %s OR nombre ILIKE %s OR grado ILIKE %s OR anio ILIKE %s OR semestre ILIKE %s OR tipo ILIKE %s ESCAPE '';"
 ASIGNATURA_QUERY_ALL = "SELECT * FROM asignatura;" 
 ASIGNATURA_QUERY_ID = "SELECT * FROM asignatura WHERE id_asignatura = %s;"
 ASIGNATURA_INSERT = "INSERT INTO asignatura (id_asignatura, nombre, grado, anio, semestre, tipo, creditos) VALUES (%s, %s, %s, %s, %s, %s, %s);"
 ASIGNATURA_DELETE = "DELETE FROM asignatura WHERE id_asignatura = %s;"
-ASIGNATURA_UPDATE = "UPDATE asignatura SET {nombre = %s, grado = %s, anio = %s, semestre = %s, tipo = %s, creditos %s} WHERE id_asignatura = %s;"
+ASIGNATURA_UPDATE = "UPDATE asignatura SET nombre = %s, grado = %s, anio = %s, semestre = %s, tipo = %s, creditos = %s WHERE id_asignatura = %s;"
 
 
 def add(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
@@ -32,7 +30,7 @@ def add(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     :type       creditos:       int
     
     :returns:   La tupla del asignatura
-    :rtype:     tuple
+    :rtype:     dict
     """
 
     try:
@@ -76,7 +74,7 @@ def get_by_id(conn, id_asignatura):
     :type       id_asignatura:  str
     
     :returns:   Todas las tuplas de la relación.
-    :rtype:     list
+    :rtype:     dict
     """
     try:
         cur = conn.cursor()
@@ -142,11 +140,11 @@ def update(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     :type       creditos:       int
     
     :returns:   La tupla actualizada en la relación
-    :rtype:     tuple
+    :rtype:     dict
     """
     try:
         cur = conn.cursor()
-        cur.execute(ASIGNATURA_UPDATE, (nombre, grado, anio, semestre, tipo, creditos))
+        cur.execute(ASIGNATURA_UPDATE, (nombre, grado, anio, semestre, tipo, creditos, id_asignatura))
 
         cur2 = conn.cursor()
         cur2.execute(ASIGNATURA_QUERY_ID, (id_asignatura,))
@@ -165,7 +163,7 @@ def delete(conn, id_asignatura):
     :type       id_asignatura:  { type_description }
 
     :returns:   La tupla eliminada de la relación.
-    :rtype:     tuple 
+    :rtype:     dict 
     """
 
     try:
