@@ -8,14 +8,12 @@ ASIGNATURA_DELETE = "DELETE FROM asignatura WHERE id_asignatura = %s;"
 ASIGNATURA_UPDATE = "UPDATE asignatura SET nombre = %s, grado = %s, anio = %s, semestre = %s, tipo = %s, creditos = %s WHERE id_asignatura = %s;"
 
 
-def add(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
+def add(id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     """
     Agrega una tupla en la relación Estudiante.
     
     Keyword arguments:
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_asignatura:  El identificador del asignatura
     :type       id_asignatura:  str
     :param      nombre:         El nombre del asignatura
@@ -36,42 +34,58 @@ def add(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     """
 
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(ASIGNATURA_INSERT,
                     (id_asignatura, nombre, grado, anio, semestre, tipo, creditos))
 
         cur2 = conn.cursor()
         cur2.execute(ASIGNATURA_QUERY_ID, (id_asignatura,))
-        return cur2.fetchone()
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
 
     except Exception as e:
         raise e
 
 
-def get_all(conn):
+def get_all():
     """
     Obtiene todas las tuplas de la relación Estudiantes
-    
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     
     :returns:   Todas las tuplas de la relación.
     :rtype:     list
     """
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(ASIGNATURA_QUERY_ALL)
-        return cur.fetchall()
+        result = cur.fetchall()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def get_by_id(conn, id_asignatura):
+def get_by_id(id_asignatura):
     """
     Obtiene la tupla de la relación Estudiantes con el identificador
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_asignatura:  El identificador de la asignatura
     :type       id_asignatura:  str
     
@@ -79,19 +93,27 @@ def get_by_id(conn, id_asignatura):
     :rtype:     dict
     """
     try:
+        conn = helpers.get_connection()
+        
         cur = conn.cursor()
         cur.execute(ASIGNATURA_QUERY_ID, (id_asignatura,))
-        return cur.fetchone()
+        result = cur.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def get(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
+def get(id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     """
     Obtiene todos las tuplas de la relación Asignatura
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_asignatura:  El identificador de la asignatura
     :type       id_asignatura:  str
     :param      nombre:         El nombre del asignatura
@@ -112,20 +134,28 @@ def get(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     """
 
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(ASIGNATURA_QUERY, (id_asignatura,
                                        nombre, numero_telefono, direccion))
-        return cur.fetchall()
+        result = cur.fetchall()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def update(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
+def update(id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     """
     Actualiza la tupla de la relación Estudiante con id_asignatura
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_asignatura:  El identificador actual del asignatura
     :type       id_asignatura:  str
     :param      nombre:         El nombre nuevo del asignatura
@@ -145,22 +175,31 @@ def update(conn, id_asignatura, nombre, grado, anio, semestre, tipo, creditos):
     :rtype:     dict
     """
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(ASIGNATURA_UPDATE, (nombre, grado, anio, semestre, tipo, creditos, id_asignatura))
 
         cur2 = conn.cursor()
         cur2.execute(ASIGNATURA_QUERY_ID, (id_asignatura,))
-        return cur2.fetchone()
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def delete(conn, id_asignatura):
+def delete(id_asignatura):
     """
     Elimina una tupla de la relación
 
-    :param      conn:           The connection
-    :type       conn:           { type_description }
     :param      id_asignatura:  The identifier asignatura
     :type       id_asignatura:  { type_description }
 
@@ -169,11 +208,22 @@ def delete(conn, id_asignatura):
     """
 
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(ASIGNATURA_DELETE, (id_asignatura,))
 
         cur2 = conn.cursor()
         cur2.execute(ASIGNATURA_QUERY_ID, (id_asignatura,))
-        return cur2.fetchone()
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
