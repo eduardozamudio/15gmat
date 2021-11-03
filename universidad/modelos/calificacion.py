@@ -1,3 +1,5 @@
+from universidad import helpers
+
 CALIFICACION_QUERY = "SELECT * FROM calificaciones WHERE id_estudiante ILIKE %s OR id_asignatura ILIKE %s OR edicion ILIKE %s ESCAPE '';"
 CALIFICACION_QUERY_ALL = "SELECT * FROM calificaciones;" 
 CALIFICACION_QUERY_ID = "SELECT * FROM calificaciones WHERE id_estudiante = %s AND id_asignatura = %s AND edicion = %s;"
@@ -6,14 +8,12 @@ CALIFICACION_DELETE = "DELETE FROM calificaciones WHERE id_estudiante = %s AND i
 CALIFICACION_UPDATE = "UPDATE calificaciones SET calificacion = %s, WHERE id_estudiante = %s, id_asignatura = %s, edicion = %s;"
 
 
-def add(conn, id_estudiante, id_asignatura, edicion, calificacion):
+def add(id_estudiante, id_asignatura, edicion, calificacion):
     """
     Agrega una tupla en la relación Estudiante.
     
     Keyword arguments:
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_estudiante:  El identificador del estudiante
     :type       id_estudiante:  str
     :param      id_asignatura:  El identificadir de la asignatura
@@ -28,42 +28,62 @@ def add(conn, id_estudiante, id_asignatura, edicion, calificacion):
     """
 
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(CALIFICACION_INSERT,
                     (id_estudiante, id_asignatura, edicion, calificacion))
 
         cur2 = conn.cursor()
         cur2.execute(CALIFICACION_QUERY_ID, (id_estudiante, id_asignatura, edicion))
-        return cur2.fetchone()
+
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
 
     except Exception as e:
         raise e
 
 
-def get_all(conn):
+def get_all():
     """
     Obtiene todas las tuplas de la relación Estudiantes
     
-    :param      conn:  La conexión a la base de datos
-    :type       conn:  Instancia de pyscopg2.connection
     
     :returns:   Todas las tuplas de la relación.
     :rtype:     list
     """
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(CALIFICACION_QUERY_ALL)
-        return cur.fetchall()
+        
+        result = cur.fetchall()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
+
     except Exception as e:
         raise e
 
 
-def get_by_id(conn, id_estudiante, id_asignatura, edicion):
+def get_by_id(id_estudiante, id_asignatura, edicion):
     """
     Obtiene la tupla de la relación Estudiantes con el identificador
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_estudiante:  El identificador del estudiante
     :type       id_estudiante:  str
     :param      id_asignatura:  El identificadir de la asignatura
@@ -75,19 +95,27 @@ def get_by_id(conn, id_estudiante, id_asignatura, edicion):
     :rtype:     dict
     """
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(CALIFICACION_QUERY_ID, (id_estudiante, id_asignatura, edicion))
-        return cur.fetchone()
+        result = cur.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def get(conn, id_estudiante, id_asignatura, edicion):
+def get(id_estudiante, id_asignatura, edicion):
     """
     Obtiene todos las tuplas de la relación Estudiantes
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_estudiante:  El identificador del estudiante
     :type       id_estudiante:  str
     :param      id_asignatura:  El identificadir de la asignatura
@@ -100,19 +128,28 @@ def get(conn, id_estudiante, id_asignatura, edicion):
     """
 
     try:
+        conn = helpers.get_connection()
+
         cur = conn.cursor()
         cur.execute(CALIFICACION_QUERY, (id_estudiante, id_asignatura, edicion))
-        return cur.fetchall()
+        result = cur.fetchall()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return result 
+
     except Exception as e:
         raise e
 
 
-def update(conn, id_estudiante, id_asignatura, edicion, calificacion):
+def update(id_estudiante, id_asignatura, edicion, calificacion):
     """
     Actualiza la tupla de la relación Estudiante con id_calificaciones
     
-    :param      conn:           La conexión a la base de datos
-    :type       conn:           Instancia de pyscopg2.connection
     :param      id_estudiante:  El identificador del estudiante
     :type       id_estudiante:  str
     :param      id_asignatura:  El identificadir de la asignatura
@@ -126,22 +163,30 @@ def update(conn, id_estudiante, id_asignatura, edicion, calificacion):
     :rtype:     dict
     """
     try:
+        conn = helpers.get_connection()
         cur = conn.cursor()
         cur.execute(CALIFICACION_UPDATE, (calificacion, id_estudiante, id_asignatura, edicion))
 
         cur2 = conn.cursor()
         cur2.execute(CALIFICACION_QUERY_ID, (id_estudiante, id_asignatura, edicion))
-        return cur2.fetchone()
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e
 
 
-def delete(conn, id_estudiante, id_asignatura, edicion):
+def delete(id_estudiante, id_asignatura, edicion):
     """
     Elimina una tupla de la relación
     
-    :param      conn:           The connection
-    :type       conn:           { type_description }
     :param      id_estudiante:  El identificador del estudiante
     :type       id_estudiante:  str
     :param      id_asignatura:  El identificadir de la asignatura
@@ -154,11 +199,22 @@ def delete(conn, id_estudiante, id_asignatura, edicion):
     """
 
     try:
+        conn = helpers.get_connection()
         cur = conn.cursor()
         cur.execute(CALIFICACION_DELETE, (id_estudiante, id_asignatura, edicion))
 
         cur2 = conn.cursor()
         cur2.execute(CALIFICACION_QUERY_ID, (id_estudiante, id_asignatura, edicion))
-        return cur2.fetchone()
+        
+        result = cur2.fetchone()
+
+        # Confirma los cambios y libera recursos
+        conn.commit()
+
+        cur.close()
+        cur2.close()
+        conn.close()
+
+        return result 
     except Exception as e:
         raise e

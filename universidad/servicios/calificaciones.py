@@ -1,5 +1,4 @@
 from universidad.modelos import calificacion
-from universidad import helpers
 
 
 def get_promedio_asignatura(id_asignatura, edicion):
@@ -12,9 +11,7 @@ def get_promedio_asignatura(id_asignatura, edicion):
     :type       edicion:        str
     """
 
-    conn = helpers.get_connection()
-
-    calificaciones = calificacion.get(conn, id_estudiante = '', id_asignatura = id_asignatura, edicion = edicion)    
+    calificaciones = calificacion.get(id_estudiante = '', id_asignatura = id_asignatura, edicion = edicion)    
 
     calificaciones_individuales = [row['calificacion'] for row in calificaciones]
 
