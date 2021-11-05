@@ -7,7 +7,7 @@ def test_get_by_id(id_estudiante):
     Debe obtener el estudiante con el id_estudiante
     
     :param      id_estudiante:   El identificador de estudiante
-    :type       id_estudiante:   int
+    :type       id_estudiante:   str
     
     """
 
@@ -23,8 +23,8 @@ def test_get(estudiante_filtro):
     """
     Debe obtener el estudiante con el filtro
     
-    :param      estudiante_filtro:  El identificador de estudiante
-    :type       estudiante_filtro:  int
+    :param      estudiante_filtro:  Filtros del estudiante
+    :type       estudiante_filtro:  dict
     
     """
 
