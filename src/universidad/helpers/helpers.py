@@ -4,13 +4,16 @@ from psycopg2.extras import DictCursor
 import dotenv
 import os
 
-
-
-
 def get_connection():
+    """
+    Obtiene una conexión a la base de datos
+
+    :returns:   La conexión a la base de datos
+    :rtype:     { connection }
+    """
 
     # Obtiene las variables de ambiente
-    dotenv.load_dotenv()
+    #dotenv.load_dotenv()
 
     PGHOST = os.getenv('PGHOST')
     PGPORT = os.getenv('PGPORT')
@@ -35,4 +38,3 @@ def get_connection():
         conn = None
 
     return conn
-

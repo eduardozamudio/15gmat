@@ -1,4 +1,4 @@
-from universidad import helpers
+from universidad.helpers import helpers
 
 
 def test_get_connection(get_connection):

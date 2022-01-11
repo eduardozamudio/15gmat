@@ -3,7 +3,7 @@ from universidad.modelos import calificacion
 
 def get_promedio_asignatura(id_asignatura, edicion):
     """
-    Obtiene el primedio de una asignatura para una edicion
+    Obtiene el promedio de una asignatura para una edicion
     
     :param      id_asignatura:  El identificador de la asignatura
     :type       id_asignatura:  str
@@ -14,7 +14,8 @@ def get_promedio_asignatura(id_asignatura, edicion):
     :rtype:     float
     """
 
-    calificaciones = calificacion.get(id_estudiante = '', id_asignatura = id_asignatura, edicion = edicion)    
+    calificaciones = calificacion.get(id_estudiante = '', \
+                        id_asignatura = id_asignatura, edicion = edicion)    
 
     calificaciones_individuales = [row['calificacion'] for row in calificaciones]
 

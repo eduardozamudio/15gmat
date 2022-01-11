@@ -1,11 +1,11 @@
-from universidad import helpers
+from universidad.helpers import helpers
 
 CALIFICACION_QUERY = "SELECT * FROM calificaciones WHERE id_estudiante ILIKE %s OR id_asignatura ILIKE %s OR edicion ILIKE %s ESCAPE '';"
 CALIFICACION_QUERY_ALL = "SELECT * FROM calificaciones;" 
 CALIFICACION_QUERY_ID = "SELECT * FROM calificaciones WHERE id_estudiante = %s AND id_asignatura = %s AND edicion = %s;"
 CALIFICACION_INSERT = "INSERT INTO calificaciones (id_estudiante, id_asignatura, edicion, calificacion) VALUES (%s, %s, %s, %s);"
 CALIFICACION_DELETE = "DELETE FROM calificaciones WHERE id_estudiante = %s AND id_asignatura = %s AND edicion = %s;"
-CALIFICACION_UPDATE = "UPDATE calificaciones SET calificacion = %s, WHERE id_estudiante = %s, id_asignatura = %s, edicion = %s;"
+CALIFICACION_UPDATE = "UPDATE calificaciones SET calificacion = %s WHERE id_estudiante = %s AND id_asignatura = %s AND edicion = %s;"
 
 
 def add(id_estudiante, id_asignatura, edicion, calificacion):

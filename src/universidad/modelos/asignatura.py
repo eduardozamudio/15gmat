@@ -1,4 +1,4 @@
-from universidad import helpers
+from universidad.helpers import helpers
 
 ASIGNATURA_QUERY = "SELECT * FROM asignatura WHERE id_asignatura ILIKE %s OR nombre ILIKE %s OR grado ILIKE %s OR anio = %s OR semestre = %s OR tipo ILIKE %s OR creditos = %s ;"
 ASIGNATURA_QUERY_ALL = "SELECT * FROM asignatura;"

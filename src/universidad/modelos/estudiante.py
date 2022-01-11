@@ -1,11 +1,14 @@
-from universidad import helpers
+from universidad.helpers import helpers
 
-ESTUDIANTE_QUERY = "SELECT * FROM estudiante WHERE id_estudiante ILIKE %s OR nombre ILIKE %s OR numero_telefono ILIKE %s OR direccion ILIKE %s ESCAPE '';"
+ESTUDIANTE_QUERY = "SELECT * FROM estudiante WHERE id_estudiante ILIKE \
+                    %s OR nombre ILIKE %s OR numero_telefono ILIKE %s OR direccion ILIKE %s ESCAPE '';"
 ESTUDIANTE_QUERY_ALL = "SELECT * FROM estudiante;" 
 ESTUDIANTE_QUERY_ID = "SELECT * FROM estudiante WHERE id_estudiante = %s;"
-ESTUDIANTE_INSERT = "INSERT INTO estudiante (id_estudiante, nombre, numero_telefono, direccion) VALUES (%s, %s, %s, %s);"
+ESTUDIANTE_INSERT = "INSERT INTO estudiante (id_estudiante, nombre, \
+                    numero_telefono, direccion) VALUES (%s, %s, %s, %s);"
 ESTUDIANTE_DELETE = "DELETE FROM estudiante WHERE id_estudiante = %s;"
-ESTUDIANTE_UPDATE = "UPDATE estudiante SET nombre = %s, numero_telefono = %s, direccion = %s WHERE id_estudiante = %s;"
+ESTUDIANTE_UPDATE = "UPDATE estudiante SET nombre = %s, numero_telefono = %s, \
+                    direccion = %s WHERE id_estudiante = %s;"
 
 
 def add(id_estudiante, nombre, numero_telefono, direccion):
