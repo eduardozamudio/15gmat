@@ -5,4 +5,4 @@ __pycache__
 dist
 keys
 diagrams
-src/universidad.egg-info
+src/universidad_pkg.egg-info/
